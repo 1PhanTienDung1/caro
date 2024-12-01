@@ -25,6 +25,9 @@ def show_grid(screen):
     line_width = min(screen.get_width() // 150,
                      screen.get_height() // 150)
     
+    grid_background_color = color.PRIMARY_VAR
+    pygame.draw.rect(screen, grid_background_color, rect)
+    
     for i in range(size + 1):
         pygame.draw.line(screen, color.GRAY, 
                          (rect.x + i * block_size, rect.y),
@@ -68,8 +71,8 @@ def show_grid(screen):
     
 def show_player(screen):
     font = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", 25);
-    player1_text = font.render("Player 1: ", False, color.WHITE)    
-    player2_text = font.render("Player 2: ", False, color.WHITE)    
+    player1_text = font.render("Player 1: ", False, color.ON_PRIMARY)    
+    player2_text = font.render("Player 2: ", False, color.ON_PRIMARY)    
     X_text = font.render("X", False, color.RED)    
     O_text = font.render("O", False, color.BLUE)
     
@@ -80,14 +83,15 @@ def show_player(screen):
                 screen.get_height() / block_h)
     
     font = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", int(25 * scale));
-    player1_text = font.render("Player 1: ", False, color.WHITE)    
-    player2_text = font.render("Player 2: ", False, color.WHITE)    
+    player1_text = font.render("Player 1: ", False, color.ON_PRIMARY)    
+    player2_text = font.render("Player 2: ", False, color.ON_PRIMARY)    
     X_text = font.render("X", False, color.RED)    
     O_text = font.render("O", False, color.BLUE)
     block_w = player1_text.get_width() + X_text.get_width()
     block_h = player1_text.get_height() + player2_text.get_height()
     
-    posx, posy = (screen.get_width() - block_w,
+    margin_x = int(screen.get_width() * 0.05)
+    posx, posy = (screen.get_width() - block_w - margin_x,
                   screen.get_height() // 2 - block_h)
     
     screen.blit(player1_text, (posx, posy))

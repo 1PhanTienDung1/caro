@@ -19,6 +19,8 @@ while running:
             
         if event.type == pygame.MOUSEBUTTONDOWN:
             scene = scene.click(screen, scene, event)
+            # if status != 0:
+            #     running = False
         
     pygame.display.flip()
     

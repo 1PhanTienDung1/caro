@@ -2,6 +2,7 @@ import pygame
 from constants import color
 from scenes import gameplay
 from scenes import ending
+from scenes import menu
 
 pygame.init()
 
@@ -107,10 +108,20 @@ def show_player(screen):
     screen.blit(X_text, (posx + player1_text.get_width(), posy))
     screen.blit(O_text, (posx + player1_text.get_width(), posy + player1_text.get_height()))    
 
+def show_home_button(screen):
+    img = pygame.image.load("img/home_button.png")
+    size = min(screen.get_width() // 10, screen.get_height() // 10)
+    img = pygame.transform.scale(img, (size, size))
+    img_rect = img.get_rect()
+    img_rect.bottomright = (screen.get_width() - 20, screen.get_height() - 20)
+    screen.blit(img, img_rect)
+    return img_rect    
+
 def show(screen):
     screen.fill(color.BLACK)
     show_grid(screen)
     show_player(screen) 
+    show_home_button(screen)
 
 def check_win():
     is_full = True
@@ -138,6 +149,8 @@ def click(screen, scene, event):
     global grid
     global status
     pos = pygame.mouse.get_pos()
+    if (show_home_button(screen).collidepoint(pos)):
+        return menu
     row,col = calculate_position(screen, pos)
     if (row < 0 or row >= size or col < 0 or col >= size):
         return scene

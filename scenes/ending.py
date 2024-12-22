@@ -25,7 +25,7 @@ def show(screen):
         text_rect.bottom = screen.get_height() // 2;
         screen.blit(text, text_rect)
     
-    text = pygame.font.Font("fonts/FiraCode-Bold.ttf", 25).render("CLICK HERE TO PLAY AGAIN", False, color.CYAN)
+    text = pygame.font.Font("fonts/FiraCode-Bold.ttf", 25).render("CLICK HERE TO PLAY AGAIN", False, color.SECOND)
     text_rect = text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
     text_rect.top = screen.get_height() // 2;
     screen.blit(text, text_rect)

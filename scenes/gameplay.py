@@ -60,8 +60,8 @@ def show_grid(screen):
     mouse_pos = pygame.mouse.get_pos()
     mouse_row, mouse_col = calculate_position(screen, mouse_pos)
     
-    X_text = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", 25).render("X", False, color.RED)
-    O_text = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", 25).render("O", False, color.BLUE)
+    X_text = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", block_size).render("X", False, color.RED)
+    O_text = pygame.font.Font("fonts/Parkinsans-ExtraBold.ttf", block_size).render("O", False, color.BLUE)
     for i in range(size):
         for j in range(size):
             if grid[i][j] == 1:
@@ -109,46 +109,73 @@ def show_player(screen):
     screen.blit(O_text, (posx + player1_text.get_width(), posy + player1_text.get_height()))    
 
 def show_home_button(screen):
+    # img = pygame.image.load("img/home_button.png")
+    # size = min(screen.get_width() // 10, screen.get_height() // 10)
+    # img = pygame.transform.scale(img, (size, size))
+    # img_rect = img.get_rect()
+    # img_rect.bottomright = (screen.get_width() - 20, screen.get_height() - 20)
+    # pygame.draw.rect(screen, color.SECOND, img_rect)
+    # screen.blit(img, img_rect)
+    # return img_rect  
+
     img = pygame.image.load("img/home_button.png")
     size = min(screen.get_width() // 10, screen.get_height() // 10)
     img = pygame.transform.scale(img, (size, size))
     img_rect = img.get_rect()
     img_rect.bottomright = (screen.get_width() - 20, screen.get_height() - 20)
+    
+    padding = 10  # Padding around the text
+    button_rect = pygame.Rect(
+        img_rect.left - padding,
+        img_rect.top - padding,
+        img_rect.width + 2 * padding,
+        img_rect.height + 2 * padding
+    )
+
+    # button background
+    pygame.draw.rect(screen, color.SECOND, button_rect, border_radius=5)  
+    pygame.draw.rect(screen, color.SECOND_VAR, button_rect, width=2, border_radius=5) #border
+
     screen.blit(img, img_rect)
-    return img_rect    
+    return button_rect
 
 def show(screen):
-    screen.fill(color.BLACK)
+    screen.fill(color.PRIMARY)
     show_grid(screen)
     show_player(screen) 
     show_home_button(screen)
+    
+def check(i, j, x, y, f):
+    for k in range(f):
+        if grid[i][j] != grid[i + k * x][j + k * y]:
+            return False
+    return grid[i][j]
 
 def check_win():
     is_full = True
+    f = min(5, size)
     for i in range(size):
         for j in range(size):
             if grid[i][j] == 0:
                 is_full = False
                 continue
-            if j + 4 < size:
-                if grid[i][j] == grid[i][j + 1] == grid[i][j + 2] == grid[i][j + 3] == grid[i][j + 4]:
-                    return grid[i][j]
-            if i + 4 < size:
-                if grid[i][j] == grid[i + 1][j] == grid[i + 2][j] == grid[i + 3][j] == grid[i + 4][j]:
-                    return grid[i][j]
-            if i + 4 < size and j + 4 < size:
-                if grid[i][j] == grid[i + 1][j + 1] == grid[i + 2][j + 2] == grid[i + 3][j + 3] == grid[i + 4][j + 4]:
-                    return grid[i][j]
-            if i + 4 < size and j - 4 >= 0:
-                if grid[i][j] == grid[i + 1][j - 1] == grid[i + 2][j - 2] == grid[i + 3][j - 3] == grid[i + 4][j - 4]:
-                    return grid[i][j]
+            if j + 4 < size and check(i, j, 0, 1, f):
+                return grid[i][j]                
+            if i + 4 < size and check(i, j, 1, 0, f):
+                return grid[i][j]
+            if i + 4 < size and j + 4 < size and check(i, j, 1, 1, f):
+                return grid[i][j]
+            if i + 4 < size and j - 4 >= 0 and check(i, j, 1, -1, f):
+                return grid[i][j]
     return (3 if is_full else 0)
     
 def click(screen, scene, event):
+    if (event.button != 1):
+        return scene
     global thisPlayer
     global grid
     global status
-    pos = pygame.mouse.get_pos()
+    pos = event.pos
     if (show_home_button(screen).collidepoint(pos)):
         return menu
     row,col = calculate_position(screen, pos)

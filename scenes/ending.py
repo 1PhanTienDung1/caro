@@ -4,7 +4,7 @@ from scenes import gameplay
 from scenes import ending
 
 def show(screen):
-    screen.fill(color.BLACK)
+    screen.fill(color.PRIMARY)
     # print(gameplay.status)
     if gameplay.status == 3:
         # game draw
@@ -25,17 +25,30 @@ def show(screen):
         text_rect.bottom = screen.get_height() // 2;
         screen.blit(text, text_rect)
     
-    text = pygame.font.Font("fonts/FiraCode-Bold.ttf", 25).render("CLICK HERE TO PLAY AGAIN", False, color.SECOND)
+    text = pygame.font.Font("fonts/VT323-Regular.ttf", 25).render("PLAY AGAIN", False, color.ON_SECOND)
     text_rect = text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
-    text_rect.top = screen.get_height() // 2;
+    text_rect.top = screen.get_height() // 2 + 50;
+    
+    padding = 10  # Padding around the text
+    button_rect = pygame.Rect(
+        text_rect.left - padding,
+        text_rect.top - padding,
+        text_rect.width + 2 * padding,
+        text_rect.height + 2 * padding
+    )
+
+    # button background
+    pygame.draw.rect(screen, color.SECOND, button_rect, border_radius=5)  
+    pygame.draw.rect(screen, color.SECOND_VAR, button_rect, width=2, border_radius=5) #border
+
     screen.blit(text, text_rect)
     
     pygame.display.update()
-    return text_rect
+    return button_rect
 
 def click(screen, scene, event):
     rect = show(screen)
-    if rect.collidepoint(pygame.mouse.get_pos()):
+    if rect.collidepoint(event.pos):
         gameplay.thisPlayer = 1
         gameplay.done = False
         gameplay.status = 0

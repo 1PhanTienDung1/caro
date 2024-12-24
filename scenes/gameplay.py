@@ -6,7 +6,7 @@ from scenes import menu
 
 pygame.init()
 
-size = 5
+size = 10
 thisPlayer = 1
 done = False
 grid = []

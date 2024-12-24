@@ -89,12 +89,15 @@ def show(screen):
     show_start_button(screen)
 
 def click(screen, scene, event):
+    global running
     if event.button != 1:
         return scene
     if show_start_button(screen).collidepoint(event.pos):
         return gameplay
     if show_exit_button(screen, show_start_button(screen)).collidepoint(event.pos):
         running = False
+        pygame.quit()
+        exit()
     return scene
         
     

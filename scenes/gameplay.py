@@ -172,6 +172,7 @@ def check_win():
 def click(screen, scene, event):
     if (event.button != 1):
         return scene
+    global size
     global thisPlayer
     global grid
     global status

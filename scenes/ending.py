@@ -52,8 +52,8 @@ def click(screen, scene, event):
         gameplay.thisPlayer = 1
         gameplay.done = False
         gameplay.status = 0
-        for i in range(5):
-            for j in range(5):
+        for i in range(gameplay.size):
+            for j in range(gameplay.size):
                 gameplay.grid[i][j] = 0
         return gameplay
     return scene
